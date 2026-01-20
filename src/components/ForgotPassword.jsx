@@ -1,12 +1,30 @@
 import React, { useState } from "react";
+import API from "../api/axios"; // ✅ import your axios instance
 
 const ForgotPassword = ({ onBackToLogin }) => {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("A password reset link has been sent to your email.");
-    setEmail("");
+    setMessage("");
+    setLoading(true);
+
+    try {
+      // ✅ Send the email to your backend
+      const { data } = await API.post("/api/auth/forgot-password", { email });
+      setMessage(data.message || "✅ Password reset link sent to your email.");
+      setEmail("");
+    } catch (err) {
+      console.error("Forgot password error:", err);
+      setMessage(
+        err.response?.data?.message ||
+          "❌ Failed to send reset link. Please check the email and try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,11 +68,17 @@ const ForgotPassword = ({ onBackToLogin }) => {
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-gradient-to-r from-yellow-400 via-white to-yellow-500 text-gray-900 font-semibold py-2 rounded-lg shadow transition-all duration-300 hover:from-yellow-300 hover:via-white hover:to-yellow-600"
           >
-            Send Reset Link
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
+
+        {/* Show success or error message */}
+        {message && (
+          <p className="text-center text-sm text-gray-200 mt-4">{message}</p>
+        )}
 
         {/* Back to login */}
         <p className="text-center text-sm text-gray-300 mt-5">

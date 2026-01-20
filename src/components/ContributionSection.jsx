@@ -7,7 +7,7 @@ const ContributionSection = ({ onBack }) => {
   const [amount, setAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
+  
   const handleFrequencySelect = (type) => {
     setFrequency(type);
     if (type === "Monthly") {
@@ -25,6 +25,8 @@ const ContributionSection = ({ onBack }) => {
     setStep(3);
   };
 
+
+
   // ✅ Improved Back Logic
   const handleBack = () => {
     if (step === 3 && frequency === "Monthly") setStep(2);
@@ -34,23 +36,41 @@ const ContributionSection = ({ onBack }) => {
   };
 
   // ✅ Simulated Payment Verification
-  const handlePaymentMade = () => {
-    setIsProcessing(true);
+ const handlePaymentMade = async () => {
+  setIsProcessing(true);
 
-    setTimeout(() => {
-      const isSuccess = Math.random() > 0.2; // 80% success rate
-      setIsProcessing(false);
+  setTimeout(async () => {
+    const isSuccess = Math.random() > 0.2; // 80% success rate
 
-      if (isSuccess) {
+    if (isSuccess) {
+      try {
+        // 🔹 SEND CONTRIBUTION TO BACKEND (ADMIN WILL SEE IT)
+        await fetch("http://localhost:5000/api/contributions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ amount }),
+        });
+
         alert(
           `✅ Payment Verified!\n\nContribution Successful!\n\nType: ${frequency}\nPlan: ${plan}\nAmount: ₦${amount.toLocaleString()}\n\nReceipt sent to user and admin.`
         );
-        onBack();
-      } else {
-        alert("❌ Payment not successful. Please retry or contact support.");
+
+        onBack(); // ⬅️ go back ONLY after saving
+      } catch (err) {
+        console.error("Contribution save failed:", err);
+        alert("Payment verified, but failed to notify admin.");
       }
-    }, 2000);
-  };
+    } else {
+      alert("❌ Payment not successful. Please retry or contact support.");
+    }
+
+    setIsProcessing(false);
+  }, 2000);
+};
+
 
   return (
     <div className="w-full min-h-screen bg-[#14213d] text-white flex flex-col items-center justify-center p-6 relative">

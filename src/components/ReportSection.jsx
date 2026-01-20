@@ -27,23 +27,41 @@ const ReportSection = ({ onBack }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.type || !form.message)
-      return alert("Please fill in all fields before submitting!");
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!form.type || !form.message.trim()) {
+    return alert("Please select a type and write a message");
+  }
 
-    const newReport = {
-      id: `RPT-${Date.now()}`,
-      type: form.type,
-      message: form.message,
-      date: new Date().toLocaleDateString(),
-      status: "Pending Review",
-    };
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:5000/api/user/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: form.type,
+        message: form.message.trim(),
+      }),
+    });
 
-    setReports([newReport, ...reports]);
-    setForm({ type: "", message: "" });
-    alert("Your report has been submitted successfully!");
-  };
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Report submitted! Admin will respond soon.");
+      setForm({ type: "", message: "" });
+      // Optional: refresh reports from server
+    } else {
+      alert(data.message || "Failed to submit");
+    }
+  } catch (err) {
+    alert("Network error. Please try again.");
+  }
+};
+
+
 
   return (
     <div className="bg-[#14213d] text-white rounded-[32px] m-4 p-6 flex flex-col overflow-y-auto min-h-screen">

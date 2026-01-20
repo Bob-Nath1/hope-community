@@ -4,7 +4,7 @@ import "swiper/css";
 
 const IntroCarousel = ({ onGetStarted }) => {
   return (
-    <div className="h-screen w-full bg-gray-50 rounded-t-4xl overflow-hidden">
+    <div className="h-screen w-full bg-gray-50 overflow-hidden">
       <Swiper spaceBetween={0} slidesPerView={1} direction="horizontal">
         {/* Slide 1 */}
         <SwiperSlide>

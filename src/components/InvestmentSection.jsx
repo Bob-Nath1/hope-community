@@ -11,20 +11,50 @@ const InvestmentSection = ({ onBack }) => {
     { name: "Elite Plan", amount: 250000, duration: "12 Months", returns: "₦400,000 (60% ROI)" },
   ];
 
-  const handlePaymentMade = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      const success = Math.random() > 0.2;
-      setIsProcessing(false);
-      if (success) {
-        alert(
-          `✅ Investment Successful!\n\nPlan: ${selectedPlan.name}\nAmount: ₦${selectedPlan.amount.toLocaleString()}\nDuration: ${selectedPlan.duration}\nExpected Return: ${selectedPlan.returns}\n\nReceipt sent to user and admin.`
-        );
-      } else {
-        alert("❌ Payment not successful. Please retry or contact support.");
-      }
-    }, 2000);
-  };
+ const handlePaymentMade = async () => {
+  if (!selectedPlan || !selectedMethod) {
+    alert("Please select a plan and payment method");
+    return;
+  }
+
+  setIsProcessing(true);
+
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:5000/api/user/investment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        planName: selectedPlan.name,
+        amount: selectedPlan.amount,
+        duration: selectedPlan.duration,
+        expectedReturn: selectedPlan.returns,
+        paymentMethod: selectedMethod,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      alert(
+        `${data.message}\n\nPlan: ${selectedPlan.name}\nAmount: ₦${selectedPlan.amount.toLocaleString()}\nWe'll notify you once verified!`
+      );
+      setSelectedPlan(null);
+      setSelectedMethod("");
+    } else {
+      alert(data.message || "Investment failed. Try again.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error. Check your connection and try again.");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
 
   return (
     <div className="w-full min-h-screen bg-[#14213d] text-white flex flex-col items-center p-6 relative">
