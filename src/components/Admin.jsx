@@ -41,7 +41,7 @@ const Admin = () => {
   const fetchStats = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/admin/stats", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -64,7 +64,7 @@ const Admin = () => {
   const fetchLoans = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/admin/loans", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/loans`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -79,7 +79,7 @@ const Admin = () => {
 
     const fetchContributions = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://localhost:5000/api/admin/contributions", {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/contributions`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
@@ -105,7 +105,7 @@ const approveContribution = async (contributionId) => {
 
   try {
     await fetch(
-      `http://localhost:5000/api/admin/contributions/approve/${contributionId}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/contributions/approve/${contributionId}`,
       {
         method: "PATCH",
         headers: {
@@ -132,13 +132,12 @@ const approveContribution = async (contributionId) => {
 
        console.log("FETCHING INVESTMENTS...");
 
-      const res = await fetch("http://localhost:5000/api/admin/investments", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/investments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
        console.log("INVESTMENTS RESPONSE STATUS:", res.status);
 
-      const data = await res.json();
  console.log("INVESTMENTS RESPONSE STATUS:", res.status);
 
       setInvestments(data.data || []);
@@ -154,7 +153,7 @@ const approveContribution = async (contributionId) => {
   const fetchWithdrawals = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/admin/withdrawals", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/withdrawals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -168,7 +167,7 @@ const approveContribution = async (contributionId) => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "http://localhost:5000/api/admin/support-center/reports",
+        `${import.meta.env.VITE_API_URL}/api/admin/support-center/reports`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -181,7 +180,7 @@ const approveContribution = async (contributionId) => {
   const fetchSupports = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/support", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/support`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -203,7 +202,7 @@ const approveContribution = async (contributionId) => {
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      `http://localhost:5000/api/admin/investments/approve/${investmentId}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/investments/approve/${investmentId}`,
       {
         method: "PATCH",
         headers: {
@@ -239,7 +238,7 @@ const approveLoan = async (id) => {
   if (!confirm("Approve loan?")) return;
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(`http://localhost:5000/api/admin/loans/approve/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/loans/approve/${id}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -263,7 +262,7 @@ const approveLoan = async (id) => {
 
   try {
     const res = await fetch(
-      `http://localhost:5000/api/admin/loans/reject/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/loans/reject/${id}`,
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
@@ -291,7 +290,7 @@ const approveLoan = async (id) => {
     if (!confirm("Approve withdrawal?")) return;
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/admin/withdrawals/approve/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/admin/withdrawals/approve/${id}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -303,7 +302,7 @@ const approveLoan = async (id) => {
   const sendReportReply = async (id) => {
     const token = localStorage.getItem("token");
     await fetch(
-      `http://localhost:5000/api/admin/support-center/reports/reply/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/support-center/reports/reply/${id}`,
       {
         method: "POST",
         headers: {
@@ -320,7 +319,7 @@ const approveLoan = async (id) => {
   const sendSupportReply = async (id) => {
     if (!supportReplyText[id]) return;
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/support/reply/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/support/reply/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -382,7 +381,6 @@ const approveLoan = async (id) => {
   }}
   className="bg-gradient-to-r from-green-500 to-green-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer"
 >
-  <p>Total Contributions</p>
   <p>Total Contributions</p>
   <h2 className="text-3xl font-bold">{totalContributions}</h2>
   <p className="text-xs">{pendingContributions} pending</p>
