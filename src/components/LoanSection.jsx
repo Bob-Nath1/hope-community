@@ -18,7 +18,7 @@ const LoanSection = ({ onBack }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/user/loan/apply", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/loan/apply`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

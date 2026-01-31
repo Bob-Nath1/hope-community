@@ -149,6 +149,7 @@ const Signup = ({ onBackToLogin, onSignupSuccess }) => {
                 <label key={p.code} className="flex items-center gap-2 text-gray-200">
                   <input
                     type="checkbox"
+                    name="plans"
                     checked={selectedPlans.includes(p.code)}
                     onChange={() => handleCheckboxChange(p.code)}
                     className="accent-yellow-400"

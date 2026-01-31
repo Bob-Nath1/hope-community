@@ -35,7 +35,7 @@ const ReportSection = ({ onBack }) => {
 
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/user/report", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/report`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

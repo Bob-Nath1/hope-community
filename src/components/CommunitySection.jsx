@@ -30,8 +30,7 @@ const CommunitySection = ({ onBack }) => {
     const fetchMessages = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/community/${selectedGroup.id}`,
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/community/${selectedGroup.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -72,7 +71,7 @@ const CommunitySection = ({ onBack }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/community/${selectedGroup.id}`,
+        `${import.meta.env.VITE_API_URL}/api/community/${selectedGroup.id}`,
         {
           method: "POST",
           headers: {
