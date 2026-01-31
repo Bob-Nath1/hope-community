@@ -34,7 +34,7 @@ const Menu = ({
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-      const res = await fetch("http://localhost:5000/api/user/notifications", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -56,7 +56,7 @@ const Menu = ({
   const markAsRead = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/user/notifications/read/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications/read/${id}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
