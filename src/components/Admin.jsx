@@ -2,7 +2,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FiUsers, FiDollarSign } from "react-icons/fi";
 
-const Admin = () => {
+const Admin = ({onBack}) => {
+  const [users, setUsers] = useState([]);
+  const [showUsers, setShowUsers] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalLoans, setTotalLoans] = useState(0);
   const [totalContributions, setTotalContributions] = useState(0);
@@ -37,7 +39,21 @@ const Admin = () => {
 
 
   /* ================= FETCH FUNCTIONS ================= */
-
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setUsers(data.data || []);
+    } catch (err) {
+      console.error("Failed to fetch users:", err);
+      setUsers([]);
+    }
+  };
+  
+  
   const fetchStats = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
@@ -124,31 +140,36 @@ const approveContribution = async (contributionId) => {
 
 
 
-  const fetchInvestments = async () => {
-    try {
-       setLoading(true);
+ const fetchInvestments = async () => {
+  try {
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-      const token = localStorage.getItem("token");
-
-       console.log("FETCHING INVESTMENTS...");
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/investments`, {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/admin/investments`,
+      {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      }
+    );
 
-       console.log("INVESTMENTS RESPONSE STATUS:", res.status);
+    const data = await res.json();
 
- console.log("INVESTMENTS RESPONSE STATUS:", res.status);
-
-      setInvestments(data.data || []);
-    } catch {
-
-          console.error("FETCH INVESTMENTS ERROR:", err);
+    if (!res.ok) {
+      console.error("Investments fetch failed:", data);
       setInvestments([]);
-    } finally {
+      return;
+    }
+
+    setInvestments(data.data || []);
+  } catch (err) {
+    console.error("FETCH INVESTMENTS ERROR:", err);
+    setInvestments([]);
+  } finally {
     setLoading(false);
   }
-  };
+};
+
+
 
   const fetchWithdrawals = async () => {
     try {
@@ -348,6 +369,14 @@ const approveLoan = async (id) => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
+
+<button
+  onClick={onBack}
+  className="mb-6 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+>
+  ← Back to Home
+</button>
+
       <h1 className="text-4xl font-bold mb-12 text-center text-gray-800">
         ADMIN DASHBOARD
       </h1>
@@ -362,16 +391,62 @@ const approveLoan = async (id) => {
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
         {/* Users */}
-        <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-2xl shadow-lg text-white">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-200">Total Users</p>
-              <h2 className="text-3xl font-bold">{totalUsers}</h2>
-            </div>
-            <FiUsers className="text-4xl" />
-          </div>
+       <div
+  onClick={() => {
+    if (!showUsers) fetchUsers();
+    setShowUsers(prev => !prev);
+  }}
+  className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
+>
+  <div className="flex justify-between items-center">
+    <div>
+      <p className="text-gray-200">Total Users</p>
+      <h2 className="text-3xl font-bold">{totalUsers}</h2>
+    </div>
+    <FiUsers className="text-4xl" />
+  </div>
+</div>
         </div>
-        </div>
+
+        {showUsers && (
+  <div className="bg-white p-8 rounded-2xl shadow mt-8 mb-12">
+    <h2 className="text-2xl font-bold mb-6">All Users</h2>
+
+    <table className="w-full table-auto border-collapse">
+      <thead className="bg-blue-600 text-white">
+        <tr>
+          <th className="p-4 border">ID</th>
+          <th className="p-4 border">Name</th>
+          <th className="p-4 border">Email</th>
+          <th className="p-4 border">Role</th>
+          <th className="p-4 border">Joined At</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {users.length > 0 ? (
+          users.map((user) => (
+            <tr key={user.id} className="hover:bg-gray-100 cursor-pointer">
+              <td className="p-4 border">{user.id}</td>
+              <td className="p-4 border">{user.name}</td>
+              <td className="p-4 border">{user.email}</td>
+              <td className="p-4 border">{user.role}</td>
+              <td className="p-4 border">
+                {new Date(user.createdAt).toLocaleDateString()}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5" className="text-center p-4 border text-gray-500">
+              No users found
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+)}
 
         <div
   onClick={() => {
@@ -387,57 +462,7 @@ const approveLoan = async (id) => {
   
 </div>
 
-        {/* Loans */}
-        <div
-          onClick={() => { setShowLoans(!showLoans); if (!showLoans) fetchLoans(); }}
-          className="bg-gradient-to-r from-yellow-500 to-yellow-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
-        >
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-200">Total Loans</p>
-              <h2 className="text-3xl font-bold">{totalLoans}</h2>
-              <p className="text-xs mt-1 text-gray-200">{pendingLoans} pending</p>
-            </div>
-            <FiDollarSign className="text-4xl" />
-          </div>
-        </div>
-
-      {/* Investments */}
-        <div
-          onClick={() => {
-  if (!showInvestments) {
-    fetchInvestments();
-  }
-  setShowInvestments((prev) => !prev);
-}}
-          className="bg-gradient-to-r from-pink-500 to-pink-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
-        >
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-200">Total Investments</p>
-              <h2 className="text-3xl font-bold">{totalInvestments}</h2>
-              <p className="text-xs mt-1 text-gray-200">{pendingInvestments} pending</p>
-            </div>
-            <FiDollarSign className="text-4xl" />
-          </div>
-        </div>
-
-        {/* Withdrawals */}
-        <div
-          onClick={() => { setShowWithdrawals(!showWithdrawals); if (!showWithdrawals) fetchWithdrawals(); }}
-          className="bg-gradient-to-r from-purple-500 to-purple-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
-        >
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-200">Total Withdrawals</p>
-              <h2 className="text-3xl font-bold">{totalWithdrawals}</h2>
-              <p className="text-xs mt-1 text-gray-200">{pendingWithdrawals} pending</p>
-            </div>
-            <FiDollarSign className="text-4xl" />
-          </div>
-        </div>
-
-        {showContributions && (
+ {showContributions && (
   <div className="bg-white p-8 rounded-2xl shadow mb-12">
     <h2 className="text-2xl font-bold mb-6">Contribution Requests</h2>
 
@@ -487,10 +512,23 @@ const approveLoan = async (id) => {
   </div>
 )}
 
+        {/* Loans */}
+        <div
+          onClick={() => { setShowLoans(!showLoans); if (!showLoans) fetchLoans(); }}
+          className="bg-gradient-to-r from-yellow-500 to-yellow-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-gray-200">Total Loans</p>
+              <h2 className="text-3xl font-bold">{totalLoans}</h2>
+              <p className="text-xs mt-1 text-gray-200">{pendingLoans} pending</p>
+            </div>
+            <FiDollarSign className="text-4xl" />
+          </div>
+        </div>
 
 
-        {/* LOANS SECTION */}
-      {showLoans && (
+        {showLoans && (
         <div className="bg-white p-8 rounded-2xl shadow-2xl mb-12">
           <h2 className="text-3xl font-bold mb-10 text-gray-800">Loan Applications</h2>
           {loans.length === 0 ? (
@@ -560,8 +598,28 @@ const approveLoan = async (id) => {
         </div>
       )}
     
-      {/* INVESTMENTS SECTION */}
-      {showInvestments && (
+
+      {/* Investments */}
+        <div
+          onClick={() => {
+  if (!showInvestments) {
+    fetchInvestments();
+  }
+  setShowInvestments((prev) => !prev);
+}}
+          className="bg-gradient-to-r from-pink-500 to-pink-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-gray-200">Total Investments</p>
+              <h2 className="text-3xl font-bold">{totalInvestments}</h2>
+              <p className="text-xs mt-1 text-gray-200">{pendingInvestments} pending</p>
+            </div>
+            <FiDollarSign className="text-4xl" />
+          </div>
+        </div>
+
+        {showInvestments && (
        <div className="mt-8 bg-white rounded-2xl p-6 shadow">
       <h2 className="text-xl font-semibold mb-4">Investment Requests</h2>
 
@@ -659,6 +717,23 @@ const approveLoan = async (id) => {
       )}
     </div>
   )}
+
+        {/* Withdrawals */}
+        <div
+          onClick={() => { setShowWithdrawals(!showWithdrawals); if (!showWithdrawals) fetchWithdrawals(); }}
+          className="bg-gradient-to-r from-purple-500 to-purple-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-gray-200">Total Withdrawals</p>
+              <h2 className="text-3xl font-bold">{totalWithdrawals}</h2>
+              <p className="text-xs mt-1 text-gray-200">{pendingWithdrawals} pending</p>
+            </div>
+            <FiDollarSign className="text-4xl" />
+          </div>
+        </div>
+
+      
 
       {/* WITHDRAWALS SECTION */}
       {showWithdrawals && (
