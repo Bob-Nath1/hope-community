@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FiBell, FiLogOut, FiArrowDownCircle, FiTrendingUp, FiArrowUpCircle } from "react-icons/fi";
 
 const Menu = ({
+  onLogout,
   onGoToHome,
   onGoToAdmin,
   onGoToLoan,
@@ -79,7 +80,7 @@ const handleLogout = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("role");
 
-  window.location.href = "/login";
+  onLogout();
 };
 
   return (
@@ -314,3 +315,4 @@ const handleLogout = () => {
 };
 
 export default Menu;
+

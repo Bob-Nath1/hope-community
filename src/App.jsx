@@ -111,6 +111,7 @@ const App = () => {
 
       {currentPage === "menu" && (
         <Menu
+          onLogout={() => handleNavigate("login")}
           onGoToHome={() => handleNavigate("menu")}
           onGoToAdmin={() => handleNavigate("admin")}
           onGoToLoan={() => handleNavigate("loan")}
