@@ -192,7 +192,7 @@ const handleLogout = () => {
           </button>
         </header>
 
-       <div className="bg-white mt-4 -ml-5 w-70 h-148 rounded-2xl flex flex-col overflow-hidden">
+       <div className="bg-white mt-4 -ml-5 w-70 h-148 rounded-2xl flex flex-col">
 
           <div className="grid grid-cols-3 gap-3 mt-4">
   {/* CONTRIBUTION */}
@@ -229,7 +229,7 @@ const handleLogout = () => {
             </h3>
 
             {/* SCROLLABLE CONTAINER — ALL READ NOTIFICATIONS */}
-           <div className="flex-1 overflow-y-auto pr-2 -mr-4">
+           <div className="h-[320px] overflow-y-auto pr-2 -mr-4">
 
               <div className="space-y-3">
                 {readNotifications.length > 0 ? (
@@ -263,34 +263,13 @@ const handleLogout = () => {
                       </div>
                     </div>
                   ))
-                ) : (
-                  /* Your original static transactions when no notifications */
-                  <>
-                    <div className="flex items-center justify-between text-[#14213d] pl-4 pr-4 bg-gray-50 rounded-xl">
-                      <div>
-                        <p className="font-semibold text-sm">Contribution Amount</p>
-                        <p className="text-xs text-gray-500">Today, 04:30PM</p>
-                      </div>
-                      <span className="text-green-600 text-sm font-bold">+₦2000.00</span>
-                    </div>
-                    <div className="flex items-center justify-between text-[#14213d] p-4 bg-gray-50 rounded-xl">
-                      <div>
-                        <p className="font-medium text-sm">Contribution Amount</p>
-                        <p className="text-xs text-gray-500">Oct 1, 2025</p>
-                      </div>
-                      <span className="text-green-600 text-sm font-bold">+₦10,000.00</span>
-                    </div>
-                    <div className="flex items-center justify-between text-[#14213d] p-4 bg-gray-50 rounded-xl">
-                      <div>
-                        <p className="font-medium text-sm">Withdrawal Amount</p>
-                        <p className="text-xs text-gray-500">Sep 20, 2025</p>
-                      </div>
-                      <span className="text-red-600 text-sm font-bold">-₦50,000.00</span>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
+                ) :  (
+        <p className="text-center text-gray-400 mt-6">
+          No recent transactions
+        </p>
+      )}
+    </div>
+  </div>
           </section>
 
       
