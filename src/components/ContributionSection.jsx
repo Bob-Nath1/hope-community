@@ -45,7 +45,7 @@ const ContributionSection = ({ onBack }) => {
     if (isSuccess) {
       try {
         // 🔹 SEND CONTRIBUTION TO BACKEND (ADMIN WILL SEE IT)
-        await fetch("http://localhost:5000/api/contributions", {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/contributions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
