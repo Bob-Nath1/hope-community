@@ -57,7 +57,7 @@ const App = () => {
         if (!token) return;
 
         const res = await fetch(
-          "http://localhost:5000/api/user/financial-summary",
+          `${import.meta.env.VITE_API_URL}/api/user/financial-summary`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
