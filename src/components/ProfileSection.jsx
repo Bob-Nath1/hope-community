@@ -9,7 +9,7 @@ const ProfileSection = ({ onBack }) => {
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [editedData, setEditedData] = useState(null)
+  const [editedData, setEditedData] = useState(null);
 
 
 /* ===============================
@@ -174,7 +174,7 @@ const handleCancel = () => {
             </button>
           </div>
         )}
-
+         </div>
         {/* USER DETAILS */}
         <div className="mt-6 text-left space-y-3">
 
@@ -249,7 +249,6 @@ const handleCancel = () => {
             </div>
           </div>
         </div>
-      </div>,
 
        {/* BADGES */}
       <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md mt-6 text-center">
@@ -265,7 +264,6 @@ const handleCancel = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
