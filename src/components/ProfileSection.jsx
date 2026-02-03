@@ -9,10 +9,9 @@ const ProfileSection = ({ onBack }) => {
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editedData, setEditedData] = useState(null)
 
-  const [editMode, setEditMode] = useState(false);
 
-  // ✅ Load saved profile picture (if any) from localStorage
 /* ===============================
      FETCH LOGGED-IN USER
   =============================== */
@@ -36,6 +35,40 @@ const ProfileSection = ({ onBack }) => {
 
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+  if (userData) {
+    setEditedData({ ...userData }); // sync when loaded
+  }
+}, [userData]);
+
+const handleChange = (e) => {
+  setEditedData(prev => ({
+    ...prev,
+    [e.target.name]: e.target.value
+  }));
+};
+
+const handleSave = async () => {
+  // TODO: real API call
+  // await fetch(`${API_BASE}/api/users/me`, {
+  // method: "PATCH",
+  // headers: { ... },
+  // body: JSON.stringify({
+  // name: editedData.name,
+  // phone: editedData.phone,
+  // })
+  // });
+
+  setUserData({ ...editedData }); // pretend it worked
+  setEditMode(false);
+};
+
+const handleCancel = () => {
+  setEditedData({ ...userData });
+  setEditMode(false);
+};
+
 
    /* ===============================
      UPLOAD PROFILE PICTURE
@@ -73,17 +106,10 @@ const ProfileSection = ({ onBack }) => {
   /* ===============================
      EDIT INPUT HANDLER
   =============================== */
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
 
   if (loading) {
     return <div className="p-6 text-center">Loading profile...</div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 flex flex-col items-center p-6">
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 flex flex-col items-center p-6">
@@ -94,31 +120,29 @@ const ProfileSection = ({ onBack }) => {
       >
         <IoArrowBack size={20} /> Back
       </button>
-
-      {/* PROFILE CARD */}
+     {/* PROFILE CARD */}
       <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md text-center">
-        <div className="flex flex-col items-center">
 
-          {/* PROFILE IMAGE */}
-          {userData.profilePicture ? (
-            <img
-              src={`${API_BASE}${userData.profilePicture}`}
-              alt="Profile"
-              className="w-28 h-28 rounded-full object-cover border-4 border-blue-500"
-            />
-          ) : (
-            <FaUserCircle className="text-blue-400 w-28 h-28" />
-          )}
+        {/* PROFILE IMAGE */}
+        {userData.profilePicture ? (
+          <img
+            src={`${API_BASE}${userData.profilePicture}`}
+            alt="Profile"
+            className="w-28 h-28 rounded-full object-cover border-4 border-blue-500 mx-auto"
+          />
+        ) : (
+          <FaUserCircle className="text-blue-400 w-28 h-28 mx-auto" />
+        )}
 
- <label className="mt-2 cursor-pointer text-sm text-blue-500 hover:underline">
-            Upload profile photo
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </label>
+        <label className="mt-2 cursor-pointer text-sm text-blue-500 hover:underline block">
+          Upload profile photo
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </label>
 
           {/* NAME + PLAN */}
           <h2 className="text-xl font-bold mt-3">{userData.name}</h2>
@@ -126,14 +150,30 @@ const ProfileSection = ({ onBack }) => {
             {userData.planName || "No plan selected"}
           </p>
 
-          {/* EDIT BUTTON */}
+           {/* EDIT / SAVE BUTTONS */}
+        {!editMode ? (
           <button
-            onClick={() => setEditMode(!editMode)}
-            className="mt-3 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition"
+            onClick={() => setEditMode(true)}
+            className="mt-3 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mx-auto"
           >
-            <FaEdit /> {editMode ? "Save" : "Edit"}
+            <FaEdit /> Edit Profile
           </button>
-        </div>
+        ) : (
+          <div className="flex justify-center gap-3 mt-3">
+            <button
+              onClick={handleSave}
+              className="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              className="bg-gray-500 text-white px-5 py-2 rounded-full hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
 
         {/* USER DETAILS */}
         <div className="mt-6 text-left space-y-3">
@@ -142,7 +182,7 @@ const ProfileSection = ({ onBack }) => {
             <label className="text-sm text-gray-600">Full Name</label>
             <input
               name="name"
-              value={userData.name}
+              value={editMode ? editedData?.name ?? "" : userData.name}
               onChange={handleChange}
               readOnly={!editMode}
               className="w-full border rounded-md px-3 py-2 bg-gray-50"
@@ -157,12 +197,11 @@ const ProfileSection = ({ onBack }) => {
               className="w-full border rounded-md px-3 py-2 bg-gray-100"
             />
           </div>
-
-          <div>
+  <div>
             <label className="text-sm text-gray-600">Phone</label>
             <input
               name="phone"
-              value={userData.phone}
+              value={editMode ? editedData.phone : userData.phone}
               onChange={handleChange}
               readOnly={!editMode}
               className="w-full border rounded-md px-3 py-2 bg-gray-50"
@@ -173,9 +212,9 @@ const ProfileSection = ({ onBack }) => {
           <div className="flex justify-between mt-4 border-t pt-3">
             <div>
               <p className="text-gray-600 text-sm">Total Contributed</p>
-              <p className="font-bold text-lg text-green-700">
-                {userData.totalContribution}
-              </p>
+             <p className="font-bold text-green-700">
+              ₦{userData.totalContribution || 0}
+            </p>
             </div>
             <div>
 
@@ -184,9 +223,9 @@ const ProfileSection = ({ onBack }) => {
           <div className="flex justify-between mt-4 border-t pt-3">
             <div>
               <p className="text-gray-600 text-sm">Total invested</p>
-              <p className="font-bold text-lg text-green-700">
-                {userData.totalInvestment}
-              </p>
+              <p className="font-bold text-green-700">
+              ₦{userData.totalInvestment || 0}
+            </p>
             </div>
             <div>
               <p className="text-gray-600 text-sm">Due time for return </p>
@@ -197,10 +236,10 @@ const ProfileSection = ({ onBack }) => {
           </div>
           <div className="flex justify-between mt-4 border-t pt-3">
             <div>
-              <p className="text-gray-600 text-sm">Total borrowed</p>
-              <p className="font-bold text-lg text-green-700">
-                {userData.totalWithdrawals}
-              </p>
+              <p className="text-gray-600 text-sm">Total withdrawn</p>
+                          <p className="font-bold text-green-700">
+              ₦{userData.totalWithdrawals || 0}
+            </p>
             </div>
             <div>
               <p className="text-gray-600 text-sm">Due time for payment</p>
@@ -212,9 +251,11 @@ const ProfileSection = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Achievements */}
+       {/* BADGES */}
       <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md mt-6 text-center">
-        <h3 className="font-semibold text-gray-700 mb-3">Badges & Progress</h3>
+        <h3 className="font-semibold text-gray-700 mb-3">
+          Badges & Progress
+        </h3>
         <div className="flex justify-center gap-4">
           <div className="bg-yellow-100 px-4 py-2 rounded-full text-yellow-800 text-sm font-semibold">
             Consistent Saver 🏅
@@ -227,5 +268,6 @@ const ProfileSection = ({ onBack }) => {
     </div>
   );
 };
+
 
 export default ProfileSection;
