@@ -249,7 +249,7 @@ const handleCancel = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>,
 
        {/* BADGES */}
       <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md mt-6 text-center">
