@@ -105,7 +105,12 @@ const ProfileSection = ({ onBack }) => {
         {/* PROFILE IMAGE */}
         {userData.profilePicture ? (
           <img
-            src={`${API_BASE}${userData.profilePicture}`}
+            src={
+  userData.profilePicture.startsWith("http")
+    ? userData.profilePicture
+    : `${API_BASE}${userData.profilePicture}`
+}
+
             alt="Profile"
             className="w-28 h-28 rounded-full object-cover border-4 border-blue-500 mx-auto"
           />
@@ -159,7 +164,7 @@ const ProfileSection = ({ onBack }) => {
             <label className="text-sm text-gray-600">Full Name</label>
             <input
               name="name"
-              value={editMode ? editedData?.name ?? "" : userData.name}
+              value={editMode ? (editedData && editedData.name) || "" : userData.name}
               onChange={handleChange}
               readOnly={!editMode}
               className="w-full border rounded-md px-3 py-2 bg-gray-50"
@@ -179,7 +184,8 @@ const ProfileSection = ({ onBack }) => {
             <label className="text-sm text-gray-600">Phone</label>
             <input
               name="phone"
-              value={editMode ? editedData?.phone ?? "" : userData.phone}
+              value={editMode ? (editedData && editedData.phone) || "" : userData.phone}
+
               onChange={handleChange}
               readOnly={!editMode}
               className="w-full border rounded-md px-3 py-2 bg-gray-50"
