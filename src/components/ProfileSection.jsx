@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaEdit } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 
-const API_BASE = "https://hope-backend-1-1mpmx.onrender.com";
+const API_BASE = import.meta.env.VITE_API_URL;
+
 
 const ProfileSection = ({ onBack }) => {
   const [userData, setUserData] = useState(null);
