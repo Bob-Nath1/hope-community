@@ -8,8 +8,10 @@ const Profile = () => {
     name: "",
     email: "",
     phone: "",
-    plans: []
+    plans: [],
+    avatar: null
   });
+   const [preview, setPreview] = useState(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +26,8 @@ const Profile = () => {
           name: data.name,
           email: data.email,
           phone: data.phone,
-          plans: data.plans || []
+          plans: data.plans || [],
+          avatar: null
         });
 
       } catch (err) {
@@ -46,10 +49,26 @@ const Profile = () => {
     }));
   };
 
+    const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setFormData(prev => ({ ...prev, avatar: file }));
+    setPreview(URL.createObjectURL(file));
+  };
+
   /* ================= SAVE PROFILE ================= */
   const handleSave = async () => {
   try {
-    const res = await API.put("/api/user/profile", formData);
+         const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("email", formData.email);
+      payload.append("phone", formData.phone);
+      if (formData.avatar) payload.append("avatar", formData.avatar);
+
+      const res = await API.put("/api/user/profile", payload, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
     setUser(res.data.data); // IMPORTANT
     setEditMode(false);
   } catch (err) {
@@ -61,6 +80,31 @@ const Profile = () => {
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow">
+
+      {/* ================= AVATAR ================= */}
+      <div className="flex flex-col items-center mb-6">
+        <img
+          src={
+            preview ||
+            user.avatar ||
+            "https://via.placeholder.com/120"
+          }
+          alt="Profile"
+          className="w-28 h-28 rounded-full object-cover border-4 border-blue-500"
+        />
+
+        {editMode && (
+          <label className="mt-3 cursor-pointer text-sm text-blue-600 font-medium">
+            Change Photo
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleImageChange}
+            />
+          </label>
+        )}
+      </div>
 
       <h2 className="text-2xl font-bold mb-6">My Profile</h2>
 
