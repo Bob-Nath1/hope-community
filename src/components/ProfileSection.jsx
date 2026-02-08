@@ -1,229 +1,149 @@
-import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaEdit } from "react-icons/fa";
-import { IoArrowBack } from "react-icons/io5";
+import React, { useEffect, useState } from "react";
+import API from "../api/axios";
 
-const API_BASE = import.meta.env.VITE_API_URL;
-
-
-const ProfileSection = ({ onBack }) => {
-  const [userData, setUserData] = useState(null);
+const Profile = () => {
+  const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [editedData, setEditedData] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    plans: []
+  });
 
-  /* ===============================
-     FETCH LOGGED-IN USER
-  =============================== */
+  const [loading, setLoading] = useState(true);
+
+  /* ================= FETCH PROFILE ================= */
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/users/me`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        const { data } = await API.get("/api/user/profile");
+        setUser(data);
+
+        setFormData({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          plans: data.plans || []
         });
-        const data = await res.json();
-        setUserData(data);
+
       } catch (err) {
-        console.error("Failed to load profile", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProfile();
   }, []);
 
-  useEffect(() => {
-    if (userData) {
-      setEditedData({ ...userData });
-    }
-  }, [userData]);
-
+  /* ================= HANDLE INPUT ================= */
   const handleChange = (e) => {
-    setEditedData((prev) => ({
+    const { name, value } = e.target;
+    setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value
     }));
   };
 
+  /* ================= SAVE PROFILE ================= */
   const handleSave = async () => {
-    setUserData({ ...editedData });
+  try {
+    const res = await API.put("/api/user/profile", formData);
+    setUser(res.data.data); // IMPORTANT
     setEditMode(false);
-  };
-
-  const handleCancel = () => {
-    setEditedData({ ...userData });
-    setEditMode(false);
-  };
-
-  /* ===============================
-     UPLOAD PROFILE PICTURE
-  =============================== */
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await fetch(`${API_BASE}/api/users/profile-picture`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formData,
-      });
-
-      const data = await res.json();
-      setUserData((prev) => ({
-        ...prev,
-        profilePicture: data.profilePicture,
-      }));
-    } catch (err) {
-      console.error("Image upload failed", err);
-    }
-  };
-
-  if (loading) {
-    return <div className="p-6 text-center">Loading profile...</div>;
+  } catch (err) {
+    console.error(err);
   }
+};
+
+  if (loading) return <p className="p-6">Loading profile...</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6">
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow">
 
-      {/* BACK BUTTON */}
-      <button
-        onClick={onBack}
-        className="flex items-center gap-2 text-blue-700 hover:text-blue-900 mb-4"
-      >
-        <IoArrowBack size={20} /> Back
-      </button>
+      <h2 className="text-2xl font-bold mb-6">My Profile</h2>
 
-      {/* PROFILE CARD */}
-      <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md mx-auto text-center">
+      {/* ================= VIEW MODE ================= */}
+      {!editMode ? (
+        <div className="space-y-4">
 
-        {/* PROFILE IMAGE */}
-        {userData.profilePicture ? (
-          <img
-            src={
-  userData.profilePicture.startsWith("http")
-    ? userData.profilePicture
-    : `${API_BASE}${userData.profilePicture}`
-}
+          <ProfileItem label="Full Name" value={user.name} />
+          <ProfileItem label="Email" value={user.email} />
+          <ProfileItem label="Phone" value={user.phone} />
 
-            alt="Profile"
-            className="w-28 h-28 rounded-full object-cover border-4 border-blue-500 mx-auto"
-          />
-        ) : (
-          <FaUserCircle className="text-blue-400 w-28 h-28 mx-auto" />
-        )}
+          <div>
+            <p className="text-gray-500">Plans</p>
+            <div className="flex gap-2 mt-1 flex-wrap">
+              {user.plans?.map(plan => (
+                <span
+                  key={plan}
+                  className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
+                >
+                  {plan}
+                </span>
+              ))}
+            </div>
+          </div>
 
-        <label className="mt-2 cursor-pointer text-sm text-blue-500 hover:underline block">
-          Upload profile photo
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </label>
-
-        <h2 className="text-xl font-bold mt-3">{userData.name}</h2>
-        <p className="text-gray-500">
-          {userData.planName || "No plan selected"}
-        </p>
-
-        {/* EDIT BUTTONS */}
-        {!editMode ? (
           <button
             onClick={() => setEditMode(true)}
-            className="mt-3 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mx-auto"
+            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg"
           >
-            <FaEdit /> Edit Profile
+            Edit Profile
           </button>
-        ) : (
-          <div className="flex justify-center gap-3 mt-3">
+
+        </div>
+      ) : (
+
+        /* ================= EDIT MODE ================= */
+
+        <div className="space-y-4">
+
+          <Input label="Full Name" name="name" value={formData.name} onChange={handleChange} />
+          <Input label="Email" name="email" value={formData.email} onChange={handleChange} />
+          <Input label="Phone" name="phone" value={formData.phone} onChange={handleChange} />
+
+          <div className="flex gap-4">
             <button
               onClick={handleSave}
-              className="bg-green-600 text-white px-5 py-2 rounded-full"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg"
             >
               Save
             </button>
+
             <button
-              onClick={handleCancel}
-              className="bg-gray-500 text-white px-5 py-2 rounded-full"
+              onClick={() => setEditMode(false)}
+              className="bg-gray-400 text-white px-6 py-2 rounded-lg"
             >
               Cancel
             </button>
           </div>
-        )}
 
-        {/* USER DETAILS */}
-        <div className="mt-6 text-left space-y-3">
-          <div>
-            <label className="text-sm text-gray-600">Full Name</label>
-            <input
-              name="name"
-              value={editMode ? (editedData && editedData.name) || "" : userData.name}
-              onChange={handleChange}
-              readOnly={!editMode}
-              className="w-full border rounded-md px-3 py-2 bg-gray-50"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm text-gray-600">Email</label>
-            <input
-              value={userData.email}
-              readOnly
-              className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm text-gray-600">Phone</label>
-            <input
-              name="phone"
-              value={editMode ? (editedData && editedData.phone) || "" : userData.phone}
-
-              onChange={handleChange}
-              readOnly={!editMode}
-              className="w-full border rounded-md px-3 py-2 bg-gray-50"
-            />
-          </div>
         </div>
-
-        {/* STATS */}
-        <div className="mt-6 space-y-4 border-t pt-4 text-left">
-          <p><strong>Total Contributed:</strong> ₦{userData.totalContribution || 0}</p>
-          <p><strong>Total Invested:</strong> ₦{userData.totalInvestment || 0}</p>
-          <p><strong>Total Withdrawn:</strong> ₦{userData.totalWithdrawals || 0}</p>
-        </div>
-      </div>
-
-      {/* BADGES */}
-      <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-md mx-auto mt-6 text-center">
-        <h3 className="font-semibold text-gray-700 mb-3">Badges & Progress</h3>
-        <div className="flex justify-center gap-4">
-          <div className="bg-yellow-100 px-4 py-2 rounded-full text-yellow-800 text-sm font-semibold">
-            Consistent Saver 🏅
-          </div>
-          <div className="bg-green-100 px-4 py-2 rounded-full text-green-800 text-sm font-semibold">
-            Loyal Member 💚
-          </div>
-        </div>
-      </div>
+      )}
 
     </div>
   );
 };
 
-export default ProfileSection;
+/* ================= COMPONENTS ================= */
 
+const ProfileItem = ({ label, value }) => (
+  <div>
+    <p className="text-gray-500">{label}</p>
+    <p className="font-semibold">{value}</p>
+  </div>
+);
 
+const Input = ({ label, ...props }) => (
+  <div>
+    <label className="block text-gray-600 mb-1">{label}</label>
+    <input
+      {...props}
+      className="w-full border px-4 py-2 rounded-lg"
+    />
+  </div>
+);
 
-
-
-
-
+export default Profile;
