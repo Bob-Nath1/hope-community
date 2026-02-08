@@ -88,7 +88,7 @@ const Profile = () => {
 
           <button
             onClick={() => setEditMode(true)}
-            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg"
+            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
           >
             Edit Profile
           </button>
@@ -107,14 +107,14 @@ const Profile = () => {
           <div className="flex gap-4">
             <button
               onClick={handleSave}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg"
+              className="bg-green-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
             >
               Save
             </button>
 
             <button
               onClick={() => setEditMode(false)}
-              className="bg-gray-400 text-white px-6 py-2 rounded-lg"
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -141,7 +141,7 @@ const Input = ({ label, ...props }) => (
     <label className="block text-gray-600 mb-1">{label}</label>
     <input
       {...props}
-      className="w-full border px-4 py-2 rounded-lg"
+       className="w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
     />
   </div>
 );
