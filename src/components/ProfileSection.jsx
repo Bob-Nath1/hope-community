@@ -9,7 +9,7 @@ const Profile = () => {
     email: "",
     phone: "",
     plans: [],
-    avatar: null
+    profilePicture: null
   });
    const [preview, setPreview] = useState(null);
 
@@ -86,7 +86,7 @@ const Profile = () => {
         <img
           src={
             preview ||
-            user.avatar ||
+             user.profilePicture ||
             "https://via.placeholder.com/120"
           }
           alt="Profile"
