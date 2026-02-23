@@ -180,7 +180,7 @@ const handleLogout = () => {
       <main className="flex-1 bg-[#14213d] text-white rounded-[32px] m-4 p-6 flex flex-col z-0">
   <header className="mb-6">
           <h2 className="text-lg font-bold mt-14 ml-17">Hello {userName}</h2>
-          <p className="text-sm text-gray-300 ml-18 sm:ml-29">Your Balance</p>
+          <p className="text-sm text-gray-300 ml-18 md:ml-29">Your Balance</p>
           <h1 className="text-xl font-bold ml-17"> ₦{balance.toLocaleString()}
 </h1>
 
