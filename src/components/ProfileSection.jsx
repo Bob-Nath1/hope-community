@@ -69,7 +69,7 @@ const Profile = () => {
       const res = await API.put("/api/user/profile", payload, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-    setUser(res.data.data); // IMPORTANT
+    setUser(res.data); // IMPORTANT
     setEditMode(false);
   } catch (err) {
     console.error(err);
