@@ -372,12 +372,12 @@ const approveLoan = async (id) => {
 
 <button
   onClick={onBack}
-  className="mb-6 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+  className="mb-2 -mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
 >
-  ← Back to Home
+  ← Back
 </button>
 
-      <h1 className="text-4xl font-bold mb-12 text-center text-gray-800">
+      <h1 className="text-xl font-bold mb-12 text-center text-gray-800">
         ADMIN DASHBOARD
       </h1>
 
@@ -396,12 +396,12 @@ const approveLoan = async (id) => {
     if (!showUsers) fetchUsers();
     setShowUsers(prev => !prev);
   }}
-  className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition"
+  className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer hover:opacity-90 transition sm:-ml-2"
 >
   <div className="flex justify-between items-center">
     <div>
       <p className="text-gray-200">Total Users</p>
-      <h2 className="text-3xl font-bold">{totalUsers}</h2>
+      <h2 className="text-xl font-bold">{totalUsers}</h2>
     </div>
     <FiUsers className="text-4xl" />
   </div>
@@ -409,17 +409,17 @@ const approveLoan = async (id) => {
         </div>
 
         {showUsers && (
-  <div className="bg-white p-8 rounded-2xl shadow mt-8 mb-12">
-    <h2 className="text-2xl font-bold mb-6">All Users</h2>
+  <div className="bg-white p-8 rounded-2xl shadow mt-8 mb-12 -ml-8">
+    <h2 className="text-xl font-bold mb-6 -ml-3  sm:ml-1">All Users</h2>
 
-    <table className="w-full table-auto border-collapse">
+    <table className="w-max-md table-auto border-collapse -ml-7 sm:ml-1 md:w-2xl lg:w-4xl lg:ml-4 xl:w-6xl 2xl:w-7xl 2xl:ml-22">
       <thead className="bg-blue-600 text-white">
         <tr>
-          <th className="p-4 border">ID</th>
-          <th className="p-4 border">Name</th>
-          <th className="p-4 border">Email</th>
-          <th className="p-4 border">Role</th>
-          <th className="p-4 border">Joined At</th>
+          <th className="sm:p-4 border">ID</th>
+          <th className="sm:p-4 border">Name</th>
+          <th className="sm:p-4 border">Email</th>
+          <th className="sm:p-4 border">Role</th>
+          <th className="sm:p-4 border">Joined At</th>
         </tr>
       </thead>
 
@@ -427,11 +427,11 @@ const approveLoan = async (id) => {
         {users.length > 0 ? (
           users.map((user) => (
             <tr key={user.id} className="hover:bg-gray-100 cursor-pointer">
-              <td className="p-4 border">{user.id}</td>
-              <td className="p-4 border">{user.name}</td>
-              <td className="p-4 border">{user.email}</td>
-              <td className="p-4 border">{user.role}</td>
-              <td className="p-4 border">
+              <td className="sm:p-4 border">{user.id}</td>
+              <td className="sm:p-4 border">{user.name}</td>
+              <td className="sm:p-4 border">{user.email}</td>
+              <td className="sm:p-4 border">{user.role}</td>
+              <td className="sm:p-4 border">
                 {new Date(user.createdAt).toLocaleDateString()}
               </td>
             </tr>
@@ -457,22 +457,22 @@ const approveLoan = async (id) => {
   className="bg-gradient-to-r from-green-500 to-green-700 p-6 rounded-2xl shadow-lg text-white cursor-pointer"
 >
   <p>Total Contributions</p>
-  <h2 className="text-3xl font-bold">{totalContributions}</h2>
+  <h2 className="text-xl font-bold">{totalContributions}</h2>
   <p className="text-xs">{pendingContributions} pending</p>
   
 </div>
 
  {showContributions && (
   <div className="bg-white p-8 rounded-2xl shadow mb-12">
-    <h2 className="text-2xl font-bold mb-6">Contribution Requests</h2>
+    <h2 className="text-xl font-bold mb-6">Contribution Requests</h2>
 
-    <table className="w-full">
+    <table className="w-full -ml-5 sm:-ml-1">
       <thead className="bg-green-600 text-white">
         <tr>
-          <th className="p-4">User</th>
-          <th className="p-4">Amount</th>
-          <th className="p-4">Status</th>
-          <th className="p-4">Action</th>
+          <th className="p-3">User</th>
+          <th className="p-3">Amount</th>
+          <th className="p-3">Status</th>
+          <th className="p-3">Action</th>
         </tr>
       </thead>
 
@@ -520,7 +520,7 @@ const approveLoan = async (id) => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-200">Total Loans</p>
-              <h2 className="text-3xl font-bold">{totalLoans}</h2>
+              <h2 className="text-xl font-bold">{totalLoans}</h2>
               <p className="text-xs mt-1 text-gray-200">{pendingLoans} pending</p>
             </div>
             <FiDollarSign className="text-4xl" />
@@ -530,9 +530,9 @@ const approveLoan = async (id) => {
 
         {showLoans && (
         <div className="bg-white p-8 rounded-2xl shadow-2xl mb-12">
-          <h2 className="text-3xl font-bold mb-10 text-gray-800">Loan Applications</h2>
+          <h2 className="text-xl font-bold mb-10 text-gray-800">Loan Applications</h2>
           {loans.length === 0 ? (
-            <p className="text-center py-20 text-gray-500 text-2xl">No loan applications yet</p>
+            <p className="text-center py-20 text-gray-500 text-base">No loan applications yet</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -612,7 +612,7 @@ const approveLoan = async (id) => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-200">Total Investments</p>
-              <h2 className="text-3xl font-bold">{totalInvestments}</h2>
+              <h2 className="text-xl font-bold">{totalInvestments}</h2>
               <p className="text-xs mt-1 text-gray-200">{pendingInvestments} pending</p>
             </div>
             <FiDollarSign className="text-4xl" />
@@ -726,7 +726,7 @@ const approveLoan = async (id) => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-200">Total Withdrawals</p>
-              <h2 className="text-3xl font-bold">{totalWithdrawals}</h2>
+              <h2 className="text-xl font-bold">{totalWithdrawals}</h2>
               <p className="text-xs mt-1 text-gray-200">{pendingWithdrawals} pending</p>
             </div>
             <FiDollarSign className="text-4xl" />
@@ -738,17 +738,17 @@ const approveLoan = async (id) => {
       {/* WITHDRAWALS SECTION */}
       {showWithdrawals && (
         <div className="bg-white rounded-2xl shadow-2xl p-10 mb-12">
-          <h2 className="text-3xl font-bold mb-10 text-gray-800">Withdrawal Requests</h2>
+          <h2 className="text-xl font-bold mb-10 text-gray-800">Withdrawal Requests</h2>
           {/* Your existing withdrawals table */}
         </div>
       )}
 
       {/* ==================== REPORTS SECTION ==================== */}
       <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-        <h2 className="text-3xl font-bold mb-8 text-gray-800">User Reports</h2>
+        <h2 className="text-xl font-bold mb-8 text-gray-800">User Reports</h2>
 
         {reports.length === 0 ? (
-          <p className="text-center py-16 text-gray-500 text-xl">No reports submitted yet</p>
+          <p className="text-center py-16 text-gray-500 text-base">No reports submitted yet</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
@@ -802,10 +802,10 @@ const approveLoan = async (id) => {
 
       {/* ==================== SUPPORT SECTION ==================== */}
 <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-  <h2 className="text-3xl font-bold mb-8 text-gray-800">Support Messages</h2>
+  <h2 className="text-xl font-bold mb-8 text-gray-800">Support Messages</h2>
 
   {supports.length === 0 ? (
-    <p className="text-center py-16 text-gray-500 text-xl">
+    <p className="text-center py-16 text-gray-500 text-base">
       No support messages yet
     </p>
   ) : (

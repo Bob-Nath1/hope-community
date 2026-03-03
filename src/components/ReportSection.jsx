@@ -67,10 +67,10 @@ const ReportSection = ({ onBack }) => {
     <div className="bg-[#14213d] text-white rounded-[32px] m-4 p-6 flex flex-col overflow-y-auto min-h-screen">
       {/* Header */}
       <header className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold">Reports & Feedback</h2>
+        <h2 className="text-lg font-bold mt-8">Reports & Feedback</h2>
         <button
           onClick={onBack}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-lg text-white"
+          className="absolute top-10 left-10 bg-white text-[#14213d] px-3 py-1 rounded-full text-sm font-medium hover:bg-gray-200 xl:left-11"
         >
           ← Back
         </button>
@@ -78,7 +78,7 @@ const ReportSection = ({ onBack }) => {
 
       {/* Report Form */}
       <section className="bg-white text-[#14213d] rounded-2xl p-5 shadow mb-8">
-        <h3 className="text-lg font-semibold mb-4">Submit a Report or Feedback</h3>
+        <h3 className="text-base font-semibold mb-4">Submit a Report or Feedback</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -87,7 +87,7 @@ const ReportSection = ({ onBack }) => {
               name="type"
               value={form.type}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 sm:w-sm"
             >
               <option value="">Select Type</option>
               <option value="Complaint">Complaint</option>

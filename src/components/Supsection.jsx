@@ -71,15 +71,7 @@ const SupportSection = ({ onBack }) => {
 
         {/* Contact Options */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl shadow p-4 text-center">
-            <h4 className="font-semibold text-lg mb-2">Chat with Support</h4>
-            <p className="text-sm text-gray-500 mb-3">
-              Get real-time help from our support team.
-            </p>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-              Start Chat
-            </button>
-          </div>
+    
 
           <div className="bg-white rounded-2xl shadow p-4 text-center">
             <h4 className="font-semibold text-lg mb-2">Email / Call Us</h4>

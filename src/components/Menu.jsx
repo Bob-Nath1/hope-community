@@ -91,17 +91,17 @@ const handleLogout = () => {
           className="absolute top-6 left-6 z-30 cursor-pointer space-y-1 mt-9 ml-4"
           onClick={() => setIsOpen(true)}
         >
-          <span className="block h-1 w-6 bg-white rounded shadow-sm"></span>
-          <span className="block h-1 w-6 bg-white rounded shadow-sm"></span>
-          <span className="block h-1 w-6 bg-white rounded shadow-sm"></span>
+          <span className="block h-1 w-4 bg-white rounded shadow-sm"></span>
+          <span className="block h-1 w-4 bg-white rounded shadow-sm"></span>
+          <span className="block h-1 w-4 bg-white rounded shadow-sm"></span>
         </div>
       )}
 
       {/* NOTIFICATION BELL */}
       <div className="absolute top-10 right-10 z-50" ref={notifRef}>
-        <div className="relative mt-4.5">
+        <div className="relative mt-4.5 -ml-14 sm:-ml-7 md:-ml-15 lg:-ml-7">
           <FiBell
-            size={25}
+            size={20}
             className="text-yellow-400 cursor-pointer hover:text-yellow-300 transition"
             onClick={() => setShowNotif(!showNotif)}
           />
@@ -149,13 +149,13 @@ const handleLogout = () => {
       <aside className={`fixed top-0 left-0 h-full bg-white border-r border-gray-200 p-6 flex flex-col justify-between transform transition-transform duration-500 ease-in-out z-60 ${isOpen ? "translate-x-0 w-42" : "-translate-x-full w-42"}`}>
         <div className="absolute top-6 right-6 cursor-pointer" onClick={() => setIsOpen(false)}>
           <div className="relative w-8 h-8">
-            <span className="absolute top-1/2 left-0 w-7 h-1 bg-black rotate-45 rounded"></span>
-            <span className="absolute top-1/ left-0 w-7 h-1 bg-black -rotate-45 rounded"></span>
+            <span className="absolute top-1/2 left-0 w-4 h-1 bg-black rotate-45 rounded"></span>
+            <span className="absolute top-2 left-0 w-4 h-1 bg-black -rotate-45 rounded"></span>
           </div>
         </div>
 
         <div className="space-y-6 mt-12">
-          <h1 className="text-2xl font-bold">Menu</h1>
+          <h1 className="text-lg font-bold">Menu</h1>
           <nav className="flex flex-col space-y-4 text-white bg-[#14213d] w-43 h-97 -ml-7">
             <button onClick={() => { setIsOpen(false); onGoToInvestment(); }} className="text-left ml-2 mt-7 border-t border-b yellow">Investment</button>
             <button onClick={() => { setIsOpen(false); onGoToLoan(); }} className="text-left ml-2 border-t border-b yellow">Loans</button>
@@ -172,40 +172,39 @@ const handleLogout = () => {
           <FiLogOut className="text-blue-900" /> Sign Out
         </button>
       </aside>
-
        {/* Overlay */}
       {isOpen && <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-20" onClick={() => setIsOpen(false)}></div>}
 
       {/* MAIN CONTENT — RECENT TRANSACTIONS SHOWS ONLY READ NOTIFICATIONS */}
-      <main className="flex-1 bg-[#14213d] text-white rounded-[32px] m-4 p-6 flex flex-col z-0">
+      <main className="flex-1 bg-[#14213d] text-white max-w-[300px]   rounded-[32px] m-4 p-6 flex flex-col z-0 sm:max-w-[700px] md:max-w-[900px]  lg:max-w-[1200px] xl:max-w-[1280px] 2xl:max-w-[1800px] ">
   <header className="mb-6">
-          <h2 className="text-lg font-bold mt-14 ml-17">Hello {userName}</h2>
-          <p className="text-sm text-gray-300 ml-18">Your Balance</p>
-          <h1 className="text-xl font-bold ml-17"> ₦{balance.toLocaleString()}
+          <h2 className="text-lg font-bold mt-14 ml-17 sm:ml-51 md:ml-68 lg:ml-100 xl:ml-130 2xl:ml-195">Hello {userName}</h2>
+          <p className="text-sm text-gray-300 ml-21 sm:ml-57 md:ml-74 lg:ml-106 xl:ml-136 2xl:ml-201">Your Balance</p>
+          <h1 className="text-xl font-bold ml-27 sm:ml-63 md:ml-80 lg:ml-114 xl:ml-144 2xl:ml-208"> ₦{balance.toLocaleString()}
 </h1>
 
           <button
             onClick={() => onGoToContribution()}
-            className="mt-4 -ml-5 w-70 bg-[#ecb555] px-4 py-2 rounded-lg font-medium"
+            className="mt-4 -ml-3.5 w-70 bg-[#ecb555] px-4 py-2 rounded-lg font-medium sm:ml-34 md:ml-44 lg:ml-82 xl:ml-114 2xl:ml-180"
           >
             Make Contribution
           </button>
         </header>
 
-       <div className="bg-white mt-4 -ml-5 w-70 h-148 rounded-2xl flex flex-col">
+       <div className="bg-white mt-4 -ml-3 w-69 h-148 rounded-2xl flex flex-col sm:ml-10 sm:w-120 md:ml-22 lg:ml-57 xl:ml-90 2xl:ml-157 ">
 
-          <div className="grid grid-cols-3 gap-3 mt-4">
+          <div className="grid grid-cols-3 gap-1 mt-4 sm:ml-14">
   {/* CONTRIBUTION */}
-  <div className="bg-blue-50 p-3 rounded-xl text-center">
+  <div className="bg-blue-50 p-3 rounded-xl w-22 text-center">
     <FiArrowDownCircle className="mx-auto text-blue-600 text-xl mb-1" />
-    <p className="text-xs text-gray-500">Contributions</p>
+    <p className="text-xs text-gray-500 -ml-1">Contributions</p>
     <p className="font-bold text-sm  text-gray-500">
       ₦{(totalContributions || 0).toLocaleString()}
     </p>
   </div>
 
   {/* INVESTMENT */}
-  <div className="bg-green-50 p-3 rounded-xl text-center">
+  <div className="bg-green-50 p-3 rounded-xl w-22 text-center">
     <FiTrendingUp className="mx-auto text-green-600 text-xl mb-1" />
     <p className="text-xs text-gray-500">Investments</p>
     <p className="font-bold text-sm  text-gray-500">
@@ -214,7 +213,7 @@ const handleLogout = () => {
   </div>
 
   {/* WITHDRAWAL */}
-  <div className="bg-red-50 p-3 rounded-xl text-center">
+  <div className="bg-red-50 p-3 rounded-xl w-22 text-center">
     <FiArrowUpCircle className="mx-auto text-red-600 text-xl mb-1" />
     <p className="text-xs text-gray-500">Withdrawals</p>
     <p className="font-bold text-sm  text-gray-500">
@@ -224,7 +223,7 @@ const handleLogout = () => {
 </div>
 
           <section className="flex-1 mt-2 -ml-3">
-            <h3 className="text-base font-semibold mb-3 text-[#14213d] ml-4">
+            <h3 className="text-xs font-semibold mb-3 text-[#14213d] ml-24 sm:ml-48 sm:text-base ">
               Recent Transactions
             </h3>
 
@@ -264,7 +263,7 @@ const handleLogout = () => {
                     </div>
                   ))
                 ) :  (
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-gray-400 mt-6 sm:ml-6">
           No recent transactions
         </p>
       )}
@@ -278,7 +277,7 @@ const handleLogout = () => {
  
       </main>
 
-  <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex justify-center gap-3 py-3">
+  <footer className="fixed bottom-2 left-0 right-0 z-50 border-gray-200 flex justify-center gap-3 py-3 -ml-7 sm:ml-2 2xl:ml-17 2xl:bottom-8">
             <button onClick={() => { setIsOpen(false); onGoToHome(); }} className="text-sm font-medium hover:text-blue-400 bg-[#ecb555] px-4 py-2 rounded-sm -mt-3 -ml-4">
               Home
             </button>

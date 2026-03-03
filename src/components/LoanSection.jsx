@@ -44,18 +44,20 @@ const LoanSection = ({ onBack }) => {
       alert("Server error");
     }
   };
-
+ 
+  
   return (
     <div className="w-full h-screen flex bg-white text-[#14213d] font-inter overflow-hidden">
       <main className="flex-1 bg-[#14213d] text-white rounded-[32px] m-4 p-6 flex flex-col overflow-y-auto">
-        <header className="flex justify-between items-center mt-4 mb-8">
-          <h2 className="text-2xl font-bold">Loan Application</h2>
-          <button onClick={onBack} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium">
+        <header className="flex justify-between items-center mt-12 mb-8">
+          <h2 className="text-lg font-bold sm:ml-14 md:ml-29 lg:ml-22">Loan Application</h2>
+          <button onClick={onBack}  className="absolute top-10 left-10 bg-white text-[#14213d] px-4 py-1 rounded-full text-sm font-medium hover:bg-gray-200 sm:left-24 md:left-39 lg:left-32">
+  
             ← Back
           </button>
         </header>
 
-        <form onSubmit={handleSubmit} className="bg-white text-[#14213d] p-6 rounded-xl w-full max-w-md shadow-md mx-auto">
+        <form onSubmit={handleSubmit} className="bg-white text-[#14213d] p-6 rounded-xl w-full max-w-md shadow-md mx-auto lg:max-w-3xl xl:max-w-5xl 2xl:max-w-7xl ">
           <div className="mb-4">
             <label className="block mb-1 font-medium">Loan Amount (₦)</label>
             <input
@@ -97,7 +99,7 @@ const LoanSection = ({ onBack }) => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-md font-bold text-lg transition duration-200"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-md font-bold text-base transition duration-200"
           >
             Submit Application
           </button>

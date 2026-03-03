@@ -61,20 +61,20 @@ const InvestmentSection = ({ onBack }) => {
       {/* Back Button */}
       <button
         onClick={onBack}
-        className="absolute top-6 left-6 bg-white text-[#14213d] px-4 py-1 rounded-full text-sm font-medium hover:bg-gray-200"
+        className="absolute top-6 left-6 bg-white text-[#14213d] px-3 py-1 rounded-full text-sm font-medium hover:bg-gray-200 xl:left-33"
       >
         ← Back
       </button>
 
-      <div className="text-center mb-8 mt-14">
-        <h1 className="text-2xl font-bold">Investment Plans</h1>
+      <div className="text-center mb-8 mt-10">
+        <h1 className="text-lg font-bold">Investment Plans</h1>
         <p className="text-gray-300 text-sm mt-1">
           Choose a plan and start growing your wealth today.
         </p>
       </div>
 
       {/* Investment Plans */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-5xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full max-w-5xl -mt-6">
         {plans.map((plan) => (
           <div
             key={plan.name}
@@ -132,7 +132,7 @@ const InvestmentSection = ({ onBack }) => {
                   <div>
                     <label className="block text-sm font-medium">Payment Method</label>
                     <select
-                      className="w-full border p-2 rounded-md"
+                      className="w-4 border  rounded-md"
                       value={selectedMethod}
                       onChange={(e) => setSelectedMethod(e.target.value)}
                     >

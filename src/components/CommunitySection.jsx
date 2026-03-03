@@ -111,24 +111,24 @@ const CommunitySection = ({ onBack }) => {
       <div className="flex justify-between items-center mb-4 flex-shrink-0">
         <button
           onClick={() => (selectedGroup ? setSelectedGroup(null) : onBack())}
-          className="text-sm text-gray-300 hover:text-white"
+          className="absolute top-8 left-7 ml-3.5 bg-white text-[#14213d] px-3 py-1 rounded-full text-sm font-medium hover:bg-gray-200 xl:left-33 sm:ml-5 md:ml-9 lg:ml-12 xl:-ml-14 2xl:ml-15"
         >
           ← Back
         </button>
 
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-lg mt-6 ml-0.5 font-semibold sm:ml-2 md:ml-6 lg:ml-8 2xl:ml-38">
           {selectedGroup ? selectedGroup.name : "Community Groups"}
         </h2>
       </div>
 
       {/* GROUP LIST */}
       {!selectedGroup && (
-        <div className="grid gap-4">
+        <div className="grid gap-4 -ml-3 sm:-ml-1 sm:w-xl md:w-4xl lg:w-6xl xl:w-7xl">
           {groups.map((group) => (
             <div
               key={group.id}
               onClick={() => setSelectedGroup(group)}
-              className="bg-white text-[#14213d] rounded-xl p-4 shadow hover:shadow-lg cursor-pointer"
+              className="bg-white text-[#14213d] rounded-xl  p-4 shadow hover:shadow-lg cursor-pointer"
             >
               <h3 className="font-semibold text-lg">{group.name}</h3>
               <p className="text-sm text-gray-600">{group.desc}</p>
@@ -140,7 +140,7 @@ const CommunitySection = ({ onBack }) => {
       {/* CHAT */}
       {selectedGroup && (
         <div className="flex flex-col flex-1 min-h-0">
-          <div className="flex-1 overflow-y-auto bg-gray-100 rounded-xl p-4 text-[#14213d]  min-h-0">
+          <div className="flex-1 overflow-y-auto w-xs bg-gray-100 rounded-xl p-4 text-[#14213d] ml-0  min-h-0 sm:ml-2 sm:w-xl md:w-2xl md:ml-6 lg:w-4xl lg:ml-9 xl:w-6xl 2xl:ml-39">
             {loading ? (
               <p className="text-center text-gray-500">Loading...</p>
             ) : messages.length === 0 ? (
@@ -172,7 +172,7 @@ const CommunitySection = ({ onBack }) => {
           </div>
 
           {/* INPUT */}
-          <div className="flex items-center mt-4 bg-white rounded-xl px-3 py-2">
+          <div className="flex items-center ml-0.5 mt-4 w-xs bg-white rounded-xl px-3 py-2 sm:ml-2 sm:w-xl md:w-2xl lg:w-4xl md:ml-6 xl:w-6xl lg:ml-9 2xl:ml-39">
             <input
               value={newMsg}
               onChange={(e) => setNewMsg(e.target.value)}
