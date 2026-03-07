@@ -7,39 +7,42 @@ const SettingSection = ({ onBack }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState("English");
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      const token = getToken();
-      if (!token) return; // user not logged in
+ useEffect(() => {
+  const fetchSettings = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("No auth token found – staying with default settings");
+      return;
+    }
 
-      try {
-        const res = await fetch("/api/settings", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    try {
+      const res = await fetch("/api/settings", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-         if (!res.ok) throw new Error("Failed to fetch settings");
-
-        const data = await res.json();
-
-        // Update local state with real data from database
-        setNotificationsEnabled(data.notificationsEnabled ?? true);
-        setDarkMode(data.darkMode ?? false);
-        setLanguage(data.language ?? "English");
-      } catch (err) {
-        console.error("Failed to load settings:", err);
-        // Keep default values (already set in useState)
+      if (!res.ok) {
+        throw new Error(`Status ${res.status}`);
       }
-    };
+
+      const data = await res.json();
+
+      setNotificationsEnabled(data.notificationsEnabled ?? true);
+      setDarkMode(data.darkMode ?? false);
+      setLanguage(data.language ?? "English");
+    } catch (err) {
+      console.error("Could not load settings:", err);
+    }
+  };
 
     const saveSettings = async (newSettings) => {
-  const token = getToken();
-  if (!token) return;
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("No auth token – cannot save settings");
+    return;
+  }
 
-  try {
-    await fetch("/api/settings", {
+ try {
+    const response = await fetch("/api/settings", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -47,9 +50,16 @@ const SettingSection = ({ onBack }) => {
       },
       body: JSON.stringify(newSettings),
     });
-    // Optional: show a tiny "Saved ✓" toast
+
+    if (!response.ok) {
+      throw new Error(`Save failed with status ${response.status}`);
+    }
+
+    console.log("Settings saved"); // optional – for debugging
+    // You can add a success toast here later
   } catch (err) {
-    console.error("Failed to save settings");
+    console.error("Failed to save settings:", err);
+    // Optional: show error message to user
   }
 };
 
